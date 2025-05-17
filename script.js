@@ -145,7 +145,7 @@ const sendToTelegram = async (pdfBlob, formData) => {
             `submission_${Date.now()}.pdf`;
             
         formDataObj.append('document', pdfBlob, pdfName);
-        formDataObj.append('caption', `New submission from ${formData.client}`);
+        formDataObj.append('caption', ` ${formData.client}`);
 
         const response = await fetch('https://api.telegram.org/bot7914915084:AAFy5X26pPqYwDJU84jgBWWRt_7PqgPBvQg/sendDocument', {
             method: 'POST',
