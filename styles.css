@@ -56,19 +56,6 @@ form {
     margin-bottom: 1.5rem;
 }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--gray-700);
-    font-weight: 500;
-}
-
-label::after {
-    content: " *";
-    color: var(--error-color);
-    display: none;
-}
-
 input[required] + label::after {
     display: inline;
 }
@@ -95,12 +82,14 @@ select {
     border-radius: 0.25rem;
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 0.5rem;
 }
 
 select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    display: inline;
 }
 
 .btn {
