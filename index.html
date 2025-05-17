@@ -15,12 +15,21 @@
                 
                 <input type="date" id="date" required>
             </div>
-
-            <div class="form-group">
-                
-                <input type="text" id="article" placeholder="Enter article description" required>
-            </div>
-
+            <select id="article" name="article" required>
+          <option value="" disabled selected>client</option>
+          <option value="Déchets cinta">Déchets cinta</option>
+          <option value="Déchets paillage noir">Déchets paillage noir</option>
+          <option value="Déchets paillage blanc">Déchets paillage blanc </option>
+          <option value="Déchets plaques jetable noir 113/106">Déchets plaques jetable noir 113/106</option>
+          <option value="Déchets plaques jetable blanche">Déchets plaques jetable blanche </option>
+          <option value="Déchets felm plastique de toite">Déchets felm plastique de toite</option>
+          <option value="Déchets poteaux de bois">Déchets poteaux de bois</option>
+          <option value=">Déchets oumblage de traitement vide">Déchets oumblage de traitement vide</option>
+          <option value="Bidons 20l">Bidons 20l</option>
+          <option value="Bidons 25l">Bidons 25l</option>
+          <option value="Budon nematrap">Budon nematrap</option>
+          
+</select>
             <div class="form-group">
                
            
@@ -53,7 +62,7 @@
             <div class="form-group">
                 
                 <div class="image-capture-controls">
-                    <button type="button" id="captureBtn" class="btn">
+                    <button type="button" id="captureBtn" class="btn" >
                         <span class="icon">📷</span> Capture
                     </button>
                     <button type="button" id="uploadBtn" class="btn">
