@@ -101,46 +101,63 @@ const validateForm = () => {
 const generatePdf = async (formData, images) => {
     const { PDFDocument, rgb } = PDFLib;
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]);
-    const { width, height } = page.getSize();
-  
+    const pageWidth = 600;
+    const pageHeight = 800;
+    const margin = 40;
     const fontSize = 12;
-    let y = height - 40;
-  
-    // Add form data
+
+    // الصفحة الأولى - لإضافة البيانات فقط
+    let page = pdfDoc.addPage([pageWidth, pageHeight]);
+    let y = pageHeight - margin;
+
+    // إضافة بيانات النموذج
     const content = [
-      ` ${formData.date} >> ${formData.client}  >>(${formData.article} )`
-      
+        `${formData.date} >> ${formData.client} >> (${formData.article})`,
+        `N° Bon: ${formData.nBon || ''} | Ticket: ${formData.nTicket || ''}`,
+        `Quantité: ${formData.quantite || ''}`
     ];
-  
+
     content.forEach(text => {
-      page.drawText(text, { x: 40, y, size: fontSize, color: rgb(0, 0, 0) });
-      y -= 20;
+        page.drawText(text, { x: margin, y, size: fontSize, color: rgb(0, 0, 0) });
+        y -= fontSize + 10;
     });
-  
-    // Add image(s)
+
+    // صفحة منفصلة لكل صورة
     for (const img of images) {
-      const imgBytes = await img.file.arrayBuffer();
-      let imageEmbed;
-      if (img.file.type === "image/jpeg" || img.file.type === "image/jpg") {
-        imageEmbed = await pdfDoc.embedJpg(imgBytes);
-      } else {
-        imageEmbed = await pdfDoc.embedPng(imgBytes);
-      }
-  
-      const imgDims = imageEmbed.scale(0.25);
-      y -= imgDims.height + 10;
-      page.drawImage(imageEmbed, {
-        x: 40,
-        y: y < 100 ? 100 : y,
-        width: imgDims.width,
-        height: imgDims.height
-      });
+        const imgBytes = await img.file.arrayBuffer();
+        const isJpg = img.file.type.includes('jpeg') || img.file.type.includes('jpg');
+        const embeddedImg = isJpg
+            ? await pdfDoc.embedJpg(imgBytes)
+            : await pdfDoc.embedPng(imgBytes);
+
+        const imgWidth = embeddedImg.width;
+        const imgHeight = embeddedImg.height;
+
+        const scale = Math.min(
+            (pageWidth - 2 * margin) / imgWidth,
+            (pageHeight - 2 * margin) / imgHeight,
+            1 // لا نكبّر الصورة، فقط نصغّر إذا لزم الأمر
+        );
+
+        const drawWidth = imgWidth * scale;
+        const drawHeight = imgHeight * scale;
+        const x = (pageWidth - drawWidth) / 2;
+        const y = (pageHeight - drawHeight) / 2;
+
+        // صفحة جديدة لكل صورة
+        const imgPage = pdfDoc.addPage([pageWidth, pageHeight]);
+        imgPage.drawImage(embeddedImg, {
+            x,
+            y,
+            width: drawWidth,
+            height: drawHeight
+        });
     }
-  
+
     const pdfBytes = await pdfDoc.save();
     return new Blob([pdfBytes], { type: 'application/pdf' });
-  };
+};
+
   
 
 const sendToGoogleSheets = async (formData) => {
