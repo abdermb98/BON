@@ -159,7 +159,7 @@ const sendToGoogleSheets = async (formData) => {
 const sendToTelegram = async (pdfBlob, formData) => {
     try {
         const formDataObj = new FormData();
-        formDataObj.append('chat_id', '-1002408201424');
+        formDataObj.append('chat_id', '-1002674327321');
 
         const pdfName = formData.nBon ? 
             `${formData.nBon}.pdf` : 
